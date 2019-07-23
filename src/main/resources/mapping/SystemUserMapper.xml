@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.SystemUserMapper">
+
+		<resultMap type="cn.java.entity.OneMenu" id="Menu">
+		<result property="id" javaType="Long" column="id" jdbcType="BIGINT" />
+		<result property="oneName" javaType="String" column="oneName"
+			jdbcType="VARCHAR" />
+		<collection property="twoMenuList" ofType="cn.java.entity.TwoMenu">
+			<result property="twoId" javaType="Long" column="twoId"
+				jdbcType="BIGINT" />
+			<result property="twoName" javaType="String" column="twoName"
+				jdbcType="VARCHAR" />
+			<result property="twoUrl" javaType="String" column="twoUrl"
+				jdbcType="VARCHAR" />
+			<result property="parent" javaType="Long" column="parent"
+				jdbcType="BIGINT" />
+		</collection>
+		</resultMap>
+		
+		<!-- 查询所有系统用户与分页查询 -->
+		<select id="getAllUserInfo" parameterType="String" resultType="Map">
+			select * from system_user 
+			<!-- 动态sql，判断参数是否为null，如果为null，则执行查询所有用户信息，
+			若不为null，则查询此参数代表的username的信息-->
+			<if test="_parameter!=null and _parameter!=''">
+				where username=#{0}
+			</if>
+		</select>
+	
+		<!-- 获取数据库中所有的权限 -->
+		<select id="getAllAuthority" resultMap="Menu">
+	select * from
+    (select sa.id,sa.authority_name as oneName from system_user su
+inner join user_authority ua on su.id=ua.user_id inner join system_authority
+sa on sa.id=ua.authority_id where sa.parent=0) t1
+inner join
+    (select sa.id as twoId,sa.authority_name as twoName,sa.authority_url as twoUrl,
+       sa.parent from system_user su inner join user_authority ua
+on su.id=ua.user_id inner join system_authority sa on
+sa.id = ua.authority_id where sa.parent!=0) t2
+on t1.id=t2.parent where id != 5;
+		</select>
+	
+	
+
+</mapper>

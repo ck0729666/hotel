@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.OrderMapper">
+
+	<!-- 订单信息查询中的条件查询 -->
+	<select id="findOrderByCondition" resultType="Map">
+		select o.*, iri.customer_name, r.room_num from orders o inner join in_room_info iri on o.room_id=iri.room_id
+		inner join rooms r on o.room_id = r.id  
+		<if test="arg0==1">
+			where o.order_num = #{arg1};
+		</if>
+		<if test="arg0==2">
+			where o.order_money = #{arg1};
+		</if>
+		<if test="arg0==3">
+			where o.order_status = #{arg1};		
+		</if>
+		<if test="arg0==4">
+			where r.id =(select rooms.id from rooms where rooms.room_num = #{arg1});
+		
+		</if>
+		
+	</select>
+
+</mapper>

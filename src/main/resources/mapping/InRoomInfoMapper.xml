@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.InRoomInfoMapper">
+	<!-- 分页查询入住信息 -->
+	<select id="getAllInRoomInfos" resultType="Map">
+		select iri.id, iri.out_room_status, rm.room_num, rt.room_type_name, iri.customer_name,
+		iri.gender,iri.idcard,iri.phone,iri.money,iri.create_date
+		from in_room_info iri inner join rooms rm on
+		iri.room_id=rm.id inner join room_type rt on rt.id= rm.room_type_id
+		where iri.status='1' 
+	</select>
+
+	<!-- 入住信息查询中的条件查询 -->
+	<select id="getInRoomInfoByCondition" resultType="Map">
+		select iri.id, rm.room_num, rt.room_type_name, iri.customer_name,
+		iri.gender,iri.idcard,iri.phone,iri.money,iri.create_date
+		from in_room_info iri inner join rooms rm on
+		iri.room_id=rm.id inner join room_type rt on rt.id= rm.room_type_id   
+		<if test="arg0==1">
+			WHERE rm.room_num=#{arg1} and iri.status='1'
+		</if>
+		<if test="arg0==2">
+			WHERE iri.customer_name=#{arg1} and iri.status='1'
+		</if>
+		<if test="arg0==3">
+			WHERE iri.phone=#{arg1} and iri.status='1'
+		</if>
+		<if test="arg0==4">
+			WHERE iri.idcard=#{arg1} and iri.status='1'
+		</if>
+	</select>
+
+
+</mapper>

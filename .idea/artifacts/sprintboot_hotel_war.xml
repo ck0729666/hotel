@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="sprintboot_hotel:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>sprintboot_hotel</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="springboot_hotel.war">
+      <element id="artifact" artifact-name="sprintboot_hotel:war exploded" />
+    </root>
+  </artifact>
+</component>

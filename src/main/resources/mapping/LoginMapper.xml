@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.LoginMapper">
+	<!-- 描述一对多的关系，描述OneMenu与TwoMenu的关系 -->
+	<resultMap type="cn.java.entity.OneMenu" id="Menu">
+		<result property="id" javaType="Long" column="id" jdbcType="BIGINT" />
+		<result property="oneName" javaType="String" column="oneName"
+			jdbcType="VARCHAR" />
+		<collection property="twoMenuList" ofType="cn.java.entity.TwoMenu">
+			<result property="twoName" javaType="String" column="twoName"
+				jdbcType="VARCHAR" />
+			<result property="twoUrl" javaType="String" column="twoUrl"
+				jdbcType="VARCHAR" />
+			<result property="parent" javaType="Long" column="parent"
+				jdbcType="BIGINT" />
+		</collection>
+	</resultMap>
+
+	<!-- 根据用户主键，获取用户拥有的权限 -->
+	<!-- id必须配置，是命名空间中的唯一标识符，可以用来代表这条语句，一个namespace对应一个
+	dao接口，这个id也对应dao里面的某个方法 -->
+	<!-- resultType可以指定返回类型，resultMap可以引用我们通过resultMap标签定义的映射类型，
+	 这两个2选1-->
+	<select id="getMenusByUserId" resultMap="Menu" parameterType="Long">
+select * from
+    (select sa.id,sa.authority_name as oneName from system_user su
+inner join user_authority ua on su.id=ua.user_id inner join system_authority
+sa on sa.id=ua.authority_id where sa.parent=0 and su.id=#{0}) t1
+inner join
+    (select sa.authority_name as twoName,sa.authority_url as twoUrl,
+       sa.parent from system_user su inner join user_authority ua
+on su.id=ua.user_id inner join system_authority sa on
+sa.id = ua.authority_id where sa.parent!=0 and su.id=#{0}) t2
+on t1.id=t2.parent;
+	</select>
+
+</mapper>
+
+
+
+

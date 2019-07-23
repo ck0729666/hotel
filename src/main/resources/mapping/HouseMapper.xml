@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.java.mapper.HouseMapper">
+
+	<!--根据筛选条件查询数据  -->
+	<select id="getHouseInfoByCondition" resultType="Map" parameterType="Map">
+		select rm.room_num,rm.room_status,rt.room_type_name,rt.room_price
+		 from rooms rm inner join room_type rt on rm.room_type_id = rt.id 
+		 
+		 <choose>
+		 	<when test="type==1">
+		 		where rt.id=#{keyword}
+		 	</when>
+		 	<otherwise>
+		 		where rm.room_status=#{keyword}
+		 	</otherwise>
+		 </choose>
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
