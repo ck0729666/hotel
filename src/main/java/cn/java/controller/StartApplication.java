@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @MapperScan(basePackages= {"cn.java.mapper"})
 @EnableCaching //启动redis缓存
 public class StartApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(StartApplication.class, args);
 	}
